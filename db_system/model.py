@@ -8,11 +8,11 @@ class User (Base):
     id = Column(Integer, primary_key=True, index=True)
 
     username = Column(String(50), unique=True, index=True)
-    email = Column(String(100), unique=True, index=True)
+    
 
     hashed_password =Column(String(255))
     
-    boards = relationship ("Board", back_populates= "owner")
+    boards = relationship ("Task", back_populates= "owner")
 
 class Task(Base):
 
@@ -20,7 +20,7 @@ class Task(Base):
 
     id = Column(Integer, primary_key= True, index= True)
 
-    title = Column(String(100), unique=True, index=True)
+    title = Column(String(100), index=True)
 
     deadline = Column (String(100), index= True)
 
