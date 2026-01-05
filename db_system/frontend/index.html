@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .auth-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .auth-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .auth-form h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            margin-top: 8px;
+        }
+
+        .auth-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .auth-btn:active {
+            transform: translateY(0);
+        }
+
+        .task-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .task-section.active {
+            display: block;
+        }
+
+        .task-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .add-task-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .add-task-form input {
+            flex: 1;
+        }
+
+        .add-task-form button {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: auto;
+        }
+
+        .add-task-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .tasks-container {
+            min-height: 200px;
+        }
+
+        .task-item {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-item:hover {
+            background: #e8eaf6;
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .task-text {
+            color: #333;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .delete-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #ff5252;
+            transform: scale(1.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+            font-size: 16px;
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 12px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .user-info {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .user-info span {
+            font-weight: 600;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="auth-section" id="authSection">
+        <div class="auth-grid">
+            <div class="auth-form">
+                <h3>Register</h3>
+                <div class="form-group">
+                    <input id="r_user" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <input id="r_pass" type="password" placeholder="Password">
+                </div>
+                <button class="auth-btn" onclick="register()">Register</button>
+            </div>
+            
+            <div class="auth-form">
+                <h3>Login</h3>
+                <div class="form-group">
+                    <input id="l_user" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <input id="l_pass" type="password" placeholder="Password">
+                </div>
+                <button class="auth-btn" onclick="login()">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="task-section" id="taskSection">
+        <h2>📝 My Tasks</h2>
+        <div class="user-info">
+            Welcome, <span id="username"></span>!
+        </div>
+        
+        <div class="add-task-form">
+            <input id="task_title" placeholder="Enter a new task...">
+            <button onclick="addTask()">Add Task</button>
+        </div>
+
+        <div class="tasks-container">
+            <ul id="taskList"></ul>
+            <div class="empty-state" id="emptyState" style="display: none;">
+                No tasks yet. Add one to get started! 🚀
+            </div>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+</div>
+
+<script>
+let TOKEN = ""
+let CURRENT_USER = ""
+
+async function register() {
+    const username = r_user.value.trim()
+    const password = r_pass.value.trim()
+    
+    if (!username || !password) {
+        alert("Please fill in all fields")
+        return
+    }
+    
+    try {
+        const res = await fetch("http://127.0.0.1:8000/auth/register", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                username: username,
+                password: password,
+                
+                
+            })
+        })
+        
+        if (!res.ok) {
+            const error = await res.json()
+            alert("Registration failed: " + (error.detail || "Unknown error"))
+            return
+        }
+        
+        alert("Registered successfully! You can now login.")
+        r_user.value = ""
+        r_pass.value = ""
+    } catch (error) {
+        alert("Error: " + error.message)
+    }
+}
+
+async function login() {
+    const username = l_user.value.trim()
+    const password = l_pass.value.trim()
+    
+    if (!username || !password) {
+        alert("Please fill in all fields")
+        return
+    }
+    
+    try {
+        const res = await fetch("http://127.0.0.1:8000/auth/login", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        })
+
+        if (!res.ok) {
+            alert("Invalid username or password")
+            return
+        }
+
+        const data = await res.json()
+
+        if (!data.access_token) {
+            alert("Login failed")
+            return
+        }
+
+        TOKEN = data.access_token
+        CURRENT_USER = username
+        alert("Login successful!")
+        
+        // Hide auth section, show task section
+        document.getElementById("authSection").style.display = "none"
+        document.getElementById("taskSection").classList.add("active")
+        document.getElementById("username").textContent = username
+        
+        l_user.value = ""
+        l_pass.value = ""
+        
+        loadTasks()
+    } catch (error) {
+        alert("Error: " + error.message)
+    }
+}
+
+async function addTask() {
+    const taskTitle = task_title.value.trim()
+    
+    if (!taskTitle) {
+        alert("Please enter a task")
+        return
+    }
+    
+    try {
+        const res = await fetch("http://127.0.0.1:8000/tasks", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${TOKEN}`
+            },
+            body: JSON.stringify({ 
+                title: taskTitle, 
+                deadline: "" 
+            })
+        })
+        
+        if (!res.ok) {
+            const error = await res.json()
+            console.error("Error response:", error)
+            alert("Failed to add task: " + (error.detail || "Unknown error"))
+            return
+        }
+        
+        task_title.value = ""
+        loadTasks()
+    } catch (error) {
+        console.error("Fetch error:", error)
+        alert("Error: " + error.message)
+    }
+}
+
+async function loadTasks() {
+    try {
+        const res = await fetch("http://127.0.0.1:8000/tasks", {
+            headers: { "Authorization": `Bearer ${TOKEN}` }
+        })
+        
+        if (!res.ok) {
+            alert("Failed to load tasks")
+            return
+        }
+        
+        const tasks = await res.json()
+
+        taskList.innerHTML = ""
+        
+        if (tasks.length === 0) {
+            document.getElementById("emptyState").style.display = "block"
+        } else {
+            document.getElementById("emptyState").style.display = "none"
+            tasks.forEach(t => {
+                const li = document.createElement("li")
+                li.className = "task-item"
+                
+                const taskText = document.createElement("span")
+                taskText.className = "task-text"
+                taskText.textContent = t.title
+                
+                const deleteBtn = document.createElement("button")
+                deleteBtn.className = "delete-btn"
+                deleteBtn.textContent = "Delete"
+                deleteBtn.onclick = (e) => {
+                    e.stopPropagation()
+                    deleteTask(t.id)
+                }
+                
+                li.appendChild(taskText)
+                li.appendChild(deleteBtn)
+                taskList.appendChild(li)
+            })
+        }
+    } catch (error) {
+        console.error("Error loading tasks:", error)
+    }
+}
+
+async function deleteTask(id) {
+    if (confirm("Are you sure you want to delete this task?")) {
+        try {
+            const res = await fetch(`http://127.0.0.1:8000/tasks/${id}`, {
+                method: "DELETE",
+                headers: { "Authorization": `Bearer ${TOKEN}` }
+            })
+            
+            if (!res.ok) {
+                alert("Failed to delete task")
+                return
+            }
+            
+            loadTasks()
+        } catch (error) {
+            alert("Error: " + error.message)
+        }
+    }
+}
+
+function logout() {
+    TOKEN = ""
+    CURRENT_USER = ""
+    document.getElementById("authSection").style.display = "block"
+    document.getElementById("taskSection").classList.remove("active")
+    l_user.value = ""
+    l_pass.value = ""
+    r_user.value = ""
+    r_pass.value = ""
+    task_title.value = ""
+    taskList.innerHTML = ""
+    alert("Logged out successfully")
+}
+</script>
+
+</body>
+</html>
