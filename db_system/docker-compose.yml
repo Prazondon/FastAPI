@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8
+    container_name: task-manager-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Coolvibes13*
+      MYSQL_DATABASE: taskmanager
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  fastapi:
+    build: .
+    container_name: task-manager-api12
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+       condition: service_healthy
+    environment:
+      MYSQL_HOST: db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: Coolvibes13*
+      MYSQL_DATABASE: taskmanager
+
+volumes:
+  db_data:
