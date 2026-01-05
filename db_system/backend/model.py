@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, Integer, ForeignKey
-from backend.database import Base
+from db_system.backend.database import Base
 from sqlalchemy.orm import relationship
 
 class User (Base):

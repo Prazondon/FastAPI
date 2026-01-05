@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
-from backend import model, schemas
+from db_system.backend import model, schemas
 
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 

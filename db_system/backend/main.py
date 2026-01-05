@@ -3,9 +3,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import OperationalError
 from datetime import time
 
-
-from backend.database import Base, engine, SessionLocal
-from backend import model, schemas, crud, auth
+from db_system.backend.database import Base, engine, SessionLocal
+from db_system.backend import model, schemas, crud, auth
 
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
@@ -14,18 +13,21 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 
-Base.metadata.create_all(bind=engine)
-
-while True:
-    try:
-        engine.connect()
-        print("Database connected!")
-        break
-    except OperationalError:
-        print("Waiting for MySQL...")
-        time.sleep(2)
-
 app = FastAPI()
+
+@app.on_event("startup")
+def wait_for_db():
+    for i in range(10):
+        try:
+            Base.metadata.create_all(bind=engine)
+            print("✅ Database connected")
+            return
+        except OperationalError:
+            print("⏳ Waiting for database...")
+            time.sleep(3)
+
+    raise Exception("❌ Database not available")
+
 
 
 app.add_middleware(

@@ -1,5 +1,5 @@
 from sqlalchemy import text
-from database import engine
+from db_system.backend.database import engine
 
 # Add the deadline column to the boards table
 with engine.connect() as conn:
