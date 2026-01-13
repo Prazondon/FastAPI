@@ -1,25 +1,22 @@
-name: FASTAPI BEGINEER CI 
+name: FastAPI Beginner CI
 
-on: push 
+on: push
 
 jobs:
   run-app:
     runs-on: ubuntu-latest
 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    steps: 
-      -name: Checkout code
-      uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
+      - name: Install FastAPI
+        run: pip install fastapi uvicorn
 
-      -name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.11"
-
-      
-      -name: Install FASTAPI 
-        run:pip install fastapi uvicorn 
-
-      -name: Check app starts
-        run:python -c "import main"
+      - name: Check app starts
+        run: python -c "import main"
