@@ -1,6 +1,9 @@
 name: FastAPI Beginner CI
 
-on: push
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   run-app:
@@ -15,8 +18,9 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install FastAPI
-        run: pip install fastapi uvicorn
+      - name: Install dependencies
+        run: |
+          pip install fastapi uvicorn
 
       - name: Check app starts
         run: python -c "import main"
