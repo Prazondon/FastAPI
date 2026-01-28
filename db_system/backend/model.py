@@ -24,7 +24,7 @@ class Task(Base):
 
     deadline = Column (String(100), index= True)
 
-    owner_id = Column(Integer, ForeignKey("Users.id"))
+    owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship ("User", back_populates= "boards")
 
