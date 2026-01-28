@@ -284,7 +284,7 @@ async function register() {
     }
     
     try {
-        const res = await fetch("http://127.0.0.1:8000/auth/register", {
+        const res = await fetch("https://fastapi-1-4zxn.onrender.com/auth/register", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
@@ -319,7 +319,7 @@ async function login() {
     }
     
     try {
-        const res = await fetch("http://127.0.0.1:8000/auth/login", {
+        const res = await fetch("https://fastapi-1-4zxn.onrender.com/auth/login", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
@@ -367,7 +367,7 @@ async function addTask() {
     }
     
     try {
-        const res = await fetch("http://127.0.0.1:8000/tasks", {
+        const res = await fetch("https://fastapi-1-4zxn.onrender.com/tasks", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -396,7 +396,7 @@ async function addTask() {
 
 async function loadTasks() {
     try {
-        const res = await fetch("http://127.0.0.1:8000/tasks", {
+        const res = await fetch("https://fastapi-1-4zxn.onrender.com/tasks", {
             headers: { "Authorization": `Bearer ${TOKEN}` }
         })
         
@@ -442,7 +442,7 @@ async function loadTasks() {
 async function deleteTask(id) {
     if (confirm("Are you sure you want to delete this task?")) {
         try {
-            const res = await fetch(`http://127.0.0.1:8000/tasks/${id}`, {
+            const res = await fetch(`https://fastapi-1-4zxn.onrender.com/tasks/${id}`, {
                 method: "DELETE",
                 headers: { "Authorization": `Bearer ${TOKEN}` }
             })
